@@ -102,6 +102,9 @@ const instinctInfo = {
   so: ["Social", "fokus pada kelompok, kontribusi, reputasi, jaringan, dan rasa menjadi bagian dari sesuatu"]
 };
 
+const enneagramMax = 5 * 4;
+const instinctMax = 6 * 4;
+
 const state = {
   index: 0,
   answers: []
@@ -196,7 +199,7 @@ function calculateScores() {
 
   questions.forEach((question, index) => {
     if (question.kind === "enneagram") {
-      scores[question.type] += state.answers[index] || 0;
+      scores[question.type] += Math.max((state.answers[index] || 1) - 1, 0);
     }
   });
 
@@ -208,7 +211,7 @@ function calculateInstinctScores() {
 
   questions.forEach((question, index) => {
     if (question.kind === "instinct") {
-      scores[question.instinct] += state.answers[index] || 0;
+      scores[question.instinct] += Math.max((state.answers[index] || 1) - 1, 0);
     }
   });
 
@@ -248,22 +251,23 @@ function getInstinctStack(scores) {
 }
 
 function renderChart(scores, instinctScores) {
-  const max = Math.max(...Object.values(scores));
   scoreChart.innerHTML = "";
 
   const typeHeading = document.createElement("h3");
   typeHeading.textContent = "Skor Enneagram";
   scoreChart.appendChild(typeHeading);
 
-  Object.entries(scores).forEach(([type, score]) => {
-    const percent = max ? Math.round((score / max) * 100) : 0;
+  Object.entries(scores)
+    .sort((a, b) => b[1] - a[1] || Number(a[0]) - Number(b[0]))
+    .forEach(([type, score]) => {
+    const percent = Math.round((score / enneagramMax) * 100);
     const [title] = typeInfo[type];
     const row = document.createElement("div");
     row.className = "bar-row";
     row.innerHTML = `
       <div class="bar-label">
         <span>Type ${type} ${title}</span>
-        <span>${score}</span>
+        <span>${percent}%</span>
       </div>
       <div class="bar-track">
         <div class="bar-fill" style="width:${percent}%"></div>
@@ -277,16 +281,17 @@ function renderChart(scores, instinctScores) {
   instinctHeading.textContent = "Instinct sp/sx/so";
   scoreChart.appendChild(instinctHeading);
 
-  const instinctMax = Math.max(...Object.values(instinctScores));
-  Object.entries(instinctScores).forEach(([instinct, score]) => {
-    const percent = instinctMax ? Math.round((score / instinctMax) * 100) : 0;
+  Object.entries(instinctScores)
+    .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+    .forEach(([instinct, score]) => {
+    const percent = Math.round((score / instinctMax) * 100);
     const [title] = instinctInfo[instinct];
     const row = document.createElement("div");
     row.className = "bar-row instinct-row";
     row.innerHTML = `
       <div class="bar-label">
         <span>${instinct.toUpperCase()} ${title}</span>
-        <span>${score}</span>
+        <span>${percent}%</span>
       </div>
       <div class="bar-track">
         <div class="bar-fill instinct-fill" style="width:${percent}%"></div>
