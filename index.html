@@ -30,14 +30,51 @@
             <button class="primary-button" id="start-button" type="button">Mulai tes</button>
           </div>
 
-          <div class="number-board" aria-hidden="true">
-            <span>1</span><span>2</span><span>3</span>
-            <span>4</span><span>5</span><span>6</span>
-            <span>7</span><span>8</span><span>9</span>
+          <div class="enneagram-wheel" aria-hidden="true">
+            <svg viewBox="0 0 420 420" role="img">
+              <circle class="wheel-ring" cx="210" cy="210" r="154"></circle>
+              <path class="wheel-line" d="M210 56 L77 287 L343 287 Z"></path>
+              <path class="wheel-line soft" d="M210 56 L309 92 L361 184 L343 287 L262 355 L158 355 L77 287 L59 184 L111 92 Z"></path>
+              <path class="wheel-line" d="M309 92 L77 287 L262 355 L111 92 L343 287 L158 355 L361 184 L59 184 L309 92"></path>
+              <g class="wheel-numbers">
+                <text x="210" y="45">9</text>
+                <text x="315" y="84">1</text>
+                <text x="385" y="192">2</text>
+                <text x="353" y="315">3</text>
+                <text x="262" y="390">4</text>
+                <text x="158" y="390">5</text>
+                <text x="67" y="315">6</text>
+                <text x="35" y="192">7</text>
+                <text x="105" y="84">8</text>
+              </g>
+            </svg>
           </div>
         </section>
 
         <section class="quiz hidden" id="quiz-view" aria-live="polite">
+          <article class="question-card">
+            <p class="eyebrow hidden" id="question-kicker" aria-hidden="true">Nilai 1-5</p>
+            <h2 id="question-text"></h2>
+          </article>
+
+          <div class="scale" aria-label="Skala jawaban">
+            <button class="scale-button" data-score="1" type="button">
+              <strong>1</strong><span>Sangat tidak cocok</span>
+            </button>
+            <button class="scale-button" data-score="2" type="button">
+              <strong>2</strong><span>Tidak cocok</span>
+            </button>
+            <button class="scale-button" data-score="3" type="button">
+              <strong>3</strong><span>Netral</span>
+            </button>
+            <button class="scale-button" data-score="4" type="button">
+              <strong>4</strong><span>Cocok</span>
+            </button>
+            <button class="scale-button" data-score="5" type="button">
+              <strong>5</strong><span>Sangat cocok</span>
+            </button>
+          </div>
+
           <div class="progress">
             <div class="progress-label">
               <span id="progress-count">1/63</span>
@@ -47,28 +84,6 @@
               <div class="progress-fill" id="progress-fill"></div>
             </div>
           </div>
-
-          <article class="question-card">
-            <p class="eyebrow hidden" id="question-kicker" aria-hidden="true">Nilai 1-5</p>
-            <h2 id="question-text"></h2>
-            <div class="scale" aria-label="Skala jawaban">
-              <button class="scale-button" data-score="1" type="button">
-                <strong>1</strong><span>Sangat tidak cocok</span>
-              </button>
-              <button class="scale-button" data-score="2" type="button">
-                <strong>2</strong><span>Tidak cocok</span>
-              </button>
-              <button class="scale-button" data-score="3" type="button">
-                <strong>3</strong><span>Netral</span>
-              </button>
-              <button class="scale-button" data-score="4" type="button">
-                <strong>4</strong><span>Cocok</span>
-              </button>
-              <button class="scale-button" data-score="5" type="button">
-                <strong>5</strong><span>Sangat cocok</span>
-              </button>
-            </div>
-          </article>
 
           <footer class="quiz-footer">
             <button class="ghost-button" id="back-button" type="button">Kembali</button>

@@ -179,44 +179,46 @@ h1 {
   transform: none;
 }
 
-.number-board {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 10px;
+.enneagram-wheel {
+  width: min(420px, 100%);
+  justify-self: center;
 }
 
-.number-board span {
-  min-height: 112px;
-  display: grid;
-  place-items: center;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  background: var(--panel);
-  color: var(--ink);
-  font-size: 3.3rem;
-  font-weight: 950;
+.enneagram-wheel svg {
+  width: 100%;
+  height: auto;
+  display: block;
 }
 
-.number-board span:nth-child(4n + 1) {
-  color: var(--green);
+.wheel-ring,
+.wheel-line {
+  fill: none;
+  stroke: var(--line);
+  stroke-width: 2;
 }
 
-.number-board span:nth-child(4n + 2) {
-  color: var(--red);
+.wheel-line {
+  stroke: var(--green);
+  stroke-opacity: 0.74;
 }
 
-.number-board span:nth-child(4n + 3) {
-  color: var(--blue);
+.wheel-line.soft {
+  stroke: var(--muted);
+  stroke-opacity: 0.28;
 }
 
-.number-board span:nth-child(4n) {
-  color: var(--violet);
+.wheel-numbers text {
+  fill: var(--green);
+  font-size: 30px;
+  font-weight: 900;
+  text-anchor: middle;
+  dominant-baseline: middle;
 }
 
 .quiz {
   display: grid;
-  grid-template-rows: auto 1fr auto;
-  gap: 24px;
+  grid-template-rows: 1fr auto auto auto;
+  gap: 18px;
 }
 
 .progress-label,
@@ -248,15 +250,19 @@ h1 {
 .question-card {
   display: grid;
   align-content: center;
-  gap: 22px;
+  min-height: 250px;
+  padding: 32px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.025);
 }
 
 .question-card h2 {
-  max-width: 860px;
+  max-width: 980px;
   margin-bottom: 0;
   overflow-wrap: break-word;
-  font-size: 2.55rem;
-  line-height: 1.14;
+  font-size: 2.7rem;
+  line-height: 1.16;
 }
 
 .scale {
@@ -468,17 +474,13 @@ h1 {
     grid-template-columns: 1fr;
   }
 
-  .number-board span,
+  .enneagram-wheel,
   .scale-button {
     min-height: 72px;
   }
 
-  .number-board {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-
-  .number-board span {
-    font-size: 2rem;
+  .enneagram-wheel {
+    width: min(320px, 100%);
   }
 
   .scale-button {
@@ -556,6 +558,8 @@ h1 {
 
   .question-card {
     align-content: start;
+    min-height: 190px;
+    padding: 22px;
   }
 
   .question-card h2 {
