@@ -386,7 +386,7 @@ function renderStoryCard(result) {
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   drawBackground(ctx, accent);
-  drawPanel(ctx, 92, 116, 896, 1688, 48);
+  drawPanel(ctx, 92, 116, 896, 1602, 48);
 
   ctx.fillStyle = "#eae5dc";
   ctx.font = "700 34px Segoe UI, Arial, sans-serif";
@@ -398,7 +398,7 @@ function renderStoryCard(result) {
   drawStorySection(ctx, {
     y: 330,
     label: "CORE TYPE",
-    main: `Type ${primary}`,
+    main: `type ${primary}`,
     sub: title,
     accent
   });
@@ -416,17 +416,17 @@ function renderStoryCard(result) {
   drawStoryDivider(ctx, 1305);
 
   drawStorySection(ctx, {
-    y: 1370,
+    y: 1348,
     label: "INSTINCTUAL STACK",
     main: `${instinctStack[0]}/${instinctStack[1]}`,
     sub: `${instinctInfo[instinctStack[0]][0]} + ${instinctInfo[instinctStack[1]][0]}`,
     accent
   });
 
-  ctx.fillStyle = "rgba(234, 229, 220, 0.62)";
-  ctx.font = "500 30px Segoe UI, Arial, sans-serif";
+  ctx.fillStyle = "rgba(234, 229, 220, 0.7)";
+  ctx.font = "600 30px Segoe UI, Arial, sans-serif";
   ctx.textAlign = "center";
-  ctx.fillText(pageUrl.replace("https://", ""), 540, 1722);
+  ctx.fillText(pageUrl.replace("https://", ""), 540, 1812);
   ctx.textAlign = "left";
 }
 
@@ -469,10 +469,10 @@ function drawStorySection(ctx, section) {
   ctx.fillText(section.main, 148, section.y + 172);
 
   ctx.fillStyle = "rgba(247, 242, 232, 0.68)";
-  ctx.font = "500 44px Segoe UI, Arial, sans-serif";
-  wrapCanvasText(ctx, section.sub, 150, section.y + 248, 780, 56);
+  ctx.font = "500 42px Segoe UI, Arial, sans-serif";
+  wrapCanvasText(ctx, section.sub, 150, section.y + 288, 780, 56);
 
-  drawMiniBars(ctx, 150, section.y + 330, section.accent);
+  drawMiniBars(ctx, 150, section.y + 386, section.accent);
 }
 
 function drawMiniBars(ctx, x, y, accent) {
