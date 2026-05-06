@@ -467,8 +467,6 @@ function renderStoryCard(result) {
     accent
   });
 
-  drawStoryDivider(ctx, 640);
-
   drawStorySection(ctx, {
     y: 720,
     label: "WING",
@@ -476,8 +474,6 @@ function renderStoryCard(result) {
     sub: getWingLabel(primary, wing),
     accent
   });
-
-  drawStoryDivider(ctx, 1090);
 
   drawStorySection(ctx, {
     y: 1170,
@@ -539,15 +535,6 @@ function drawStorySection(ctx, section) {
   ctx.font = "500 40px Segoe UI, Arial, sans-serif";
   wrapCanvasText(ctx, section.sub, 540, section.y + 294, 780, 54, "center");
   ctx.textAlign = "left";
-}
-
-function drawStoryDivider(ctx, y) {
-  ctx.strokeStyle = "rgba(234, 229, 220, 0.16)";
-  ctx.lineWidth = 2;
-  ctx.beginPath();
-  ctx.moveTo(148, y);
-  ctx.lineTo(932, y);
-  ctx.stroke();
 }
 
 function wrapCanvasText(ctx, text, x, y, maxWidth, lineHeight, align = "left") {
