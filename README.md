@@ -8,6 +8,7 @@ Aplikasi tes Enneagram ringan berbasis HTML, CSS, dan JavaScript vanilla.
 - Skor untuk 9 tipe Enneagram
 - Hasil tipe utama, kemungkinan wing, instinct stack sp/sx/so, dan chart skor
 - Mode light/dark
+- Story card vertikal 1080x1920 dengan tombol download dan share
 - Responsive untuk desktop dan mobile
 - Tidak membutuhkan dependency
 

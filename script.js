@@ -138,12 +138,23 @@ const resultWing = document.querySelector("#result-wing");
 const scoreChart = document.querySelector("#score-chart");
 const resultInstinct = document.querySelector("#result-instinct");
 const themeButton = document.querySelector("#theme-button");
+const storyCard = document.querySelector("#story-card");
+const downloadButton = document.querySelector("#download-button");
+const instagramButton = document.querySelector("#instagram-button");
+const facebookButton = document.querySelector("#facebook-button");
+const whatsappButton = document.querySelector("#whatsapp-button");
+const pageUrl = "https://emmalafleur.github.io/enneagram/";
+let latestResult = null;
 
 document.querySelector("#start-button").addEventListener("click", startQuiz);
 document.querySelector("#reset-button").addEventListener("click", resetQuiz);
 document.querySelector("#retake-button").addEventListener("click", resetQuiz);
 document.querySelector("#copy-button").addEventListener("click", copyResult);
 themeButton.addEventListener("click", toggleTheme);
+downloadButton.addEventListener("click", downloadStoryCard);
+instagramButton.addEventListener("click", shareToInstagram);
+facebookButton.addEventListener("click", shareToFacebook);
+whatsappButton.addEventListener("click", shareToWhatsApp);
 backButton.addEventListener("click", goBack);
 
 scaleButtons.forEach((button) => {
@@ -246,6 +257,7 @@ function showResult() {
   const wing = getWing(primary, scores);
   const instinctStack = getInstinctStack(instinctScores);
   const [title, description] = typeInfo[primary];
+  latestResult = { primary, wing, instinctStack, title, description };
 
   quizView.classList.add("hidden");
   resultView.classList.remove("hidden");
@@ -255,6 +267,7 @@ function showResult() {
   resultWing.textContent = `Kemungkinan wing: ${primary}w${wing}. Wing dipilih dari tipe tetangga dengan skor tertinggi.`;
   resultInstinct.textContent = `Dominan ${instinctStack[0].toUpperCase()} berarti ${instinctInfo[instinctStack[0]][1]}.`;
   renderChart(scores, instinctScores);
+  renderStoryCard(latestResult);
 }
 
 function getWing(primary, scores) {
@@ -363,4 +376,212 @@ async function copyResult() {
   window.setTimeout(() => {
     button.textContent = "Salin hasil";
   }, 1400);
+}
+
+function renderStoryCard(result) {
+  const canvas = storyCard;
+  const ctx = canvas.getContext("2d");
+  const { primary, wing, instinctStack, title } = result;
+  const accent = getInstinctAccent(instinctStack[0]);
+
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  drawBackground(ctx, accent);
+  drawPanel(ctx, 92, 116, 896, 1688, 48);
+
+  ctx.fillStyle = "#eae5dc";
+  ctx.font = "700 34px Segoe UI, Arial, sans-serif";
+  ctx.fillText("ENNEAGRAM RESULT", 148, 210);
+
+  ctx.fillStyle = accent;
+  ctx.fillRect(148, 245, 124, 6);
+
+  drawStorySection(ctx, {
+    y: 330,
+    label: "CORE TYPE",
+    main: `Type ${primary}`,
+    sub: title,
+    accent
+  });
+
+  drawStoryDivider(ctx, 785);
+
+  drawStorySection(ctx, {
+    y: 850,
+    label: "WING",
+    main: `${primary}w${wing}`,
+    sub: getWingLabel(primary, wing),
+    accent
+  });
+
+  drawStoryDivider(ctx, 1305);
+
+  drawStorySection(ctx, {
+    y: 1370,
+    label: "INSTINCTUAL STACK",
+    main: `${instinctStack[0]}/${instinctStack[1]}`,
+    sub: `${instinctInfo[instinctStack[0]][0]} + ${instinctInfo[instinctStack[1]][0]}`,
+    accent
+  });
+
+  ctx.fillStyle = "rgba(234, 229, 220, 0.62)";
+  ctx.font = "500 30px Segoe UI, Arial, sans-serif";
+  ctx.textAlign = "center";
+  ctx.fillText(pageUrl.replace("https://", ""), 540, 1722);
+  ctx.textAlign = "left";
+}
+
+function drawBackground(ctx, accent) {
+  const gradient = ctx.createLinearGradient(0, 0, 1080, 1920);
+  gradient.addColorStop(0, "#0d1210");
+  gradient.addColorStop(0.55, "#171d19");
+  gradient.addColorStop(1, "#0b0f0d");
+  ctx.fillStyle = gradient;
+  ctx.fillRect(0, 0, 1080, 1920);
+
+  ctx.globalAlpha = 0.14;
+  ctx.fillStyle = accent;
+  ctx.beginPath();
+  ctx.arc(875, 290, 270, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.beginPath();
+  ctx.arc(180, 1660, 330, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.globalAlpha = 1;
+}
+
+function drawPanel(ctx, x, y, width, height, radius) {
+  ctx.beginPath();
+  ctx.roundRect(x, y, width, height, radius);
+  ctx.fillStyle = "rgba(255, 250, 241, 0.045)";
+  ctx.fill();
+  ctx.strokeStyle = "rgba(234, 229, 220, 0.18)";
+  ctx.lineWidth = 2;
+  ctx.stroke();
+}
+
+function drawStorySection(ctx, section) {
+  ctx.fillStyle = section.accent;
+  ctx.font = "800 30px Segoe UI, Arial, sans-serif";
+  ctx.fillText(section.label, 148, section.y);
+
+  ctx.fillStyle = "#f7f2e8";
+  ctx.font = "900 150px Segoe UI, Arial, sans-serif";
+  ctx.fillText(section.main, 148, section.y + 172);
+
+  ctx.fillStyle = "rgba(247, 242, 232, 0.68)";
+  ctx.font = "500 44px Segoe UI, Arial, sans-serif";
+  wrapCanvasText(ctx, section.sub, 150, section.y + 248, 780, 56);
+
+  drawMiniBars(ctx, 150, section.y + 330, section.accent);
+}
+
+function drawMiniBars(ctx, x, y, accent) {
+  const widths = [250, 160, 96];
+  widths.forEach((width, index) => {
+    ctx.fillStyle = "rgba(234, 229, 220, 0.14)";
+    ctx.beginPath();
+    ctx.roundRect(x, y + index * 34, 390, 12, 8);
+    ctx.fill();
+
+    ctx.fillStyle = index === 0 ? accent : "rgba(234, 229, 220, 0.48)";
+    ctx.beginPath();
+    ctx.roundRect(x, y + index * 34, width, 12, 8);
+    ctx.fill();
+  });
+}
+
+function drawStoryDivider(ctx, y) {
+  ctx.strokeStyle = "rgba(234, 229, 220, 0.16)";
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(148, y);
+  ctx.lineTo(932, y);
+  ctx.stroke();
+}
+
+function wrapCanvasText(ctx, text, x, y, maxWidth, lineHeight) {
+  const words = text.split(" ");
+  let line = "";
+
+  words.forEach((word) => {
+    const nextLine = line ? `${line} ${word}` : word;
+    if (ctx.measureText(nextLine).width > maxWidth && line) {
+      ctx.fillText(line, x, y);
+      line = word;
+      y += lineHeight;
+    } else {
+      line = nextLine;
+    }
+  });
+
+  ctx.fillText(line, x, y);
+}
+
+function getInstinctAccent(instinct) {
+  return {
+    sp: "#6fd3a2",
+    sx: "#ef6f86",
+    so: "#78a8f4"
+  }[instinct] || "#6fd3a2";
+}
+
+function getWingLabel(primary, wing) {
+  const wingNames = {
+    "1w9": "Principled, calm, self-contained",
+    "1w2": "Principled, warm, helpful",
+    "2w1": "Caring, responsible, sincere",
+    "2w3": "Caring, expressive, ambitious",
+    "3w2": "Driven, charming, people-aware",
+    "3w4": "Driven, refined, identity-aware",
+    "4w3": "Expressive, polished, image-aware",
+    "4w5": "Expressive, introspective, cerebral",
+    "5w4": "Analytical, imaginative, private",
+    "5w6": "Analytical, cautious, systematic",
+    "6w5": "Loyal, observant, prepared",
+    "6w7": "Loyal, lively, connected",
+    "7w6": "Curious, upbeat, relational",
+    "7w8": "Curious, bold, energetic",
+    "8w7": "Assertive, expansive, intense",
+    "8w9": "Assertive, steady, protective",
+    "9w8": "Calm, grounded, quietly strong",
+    "9w1": "Calm, principled, harmonious"
+  };
+
+  return wingNames[`${primary}w${wing}`] || "Secondary style influence";
+}
+
+function downloadStoryCard() {
+  const link = document.createElement("a");
+  link.href = storyCard.toDataURL("image/png");
+  link.download = `${resultType.textContent.toLowerCase().replaceAll(" ", "-").replace("/", "-")}-enneagram-story.png`;
+  link.click();
+}
+
+async function shareStoryCard(title) {
+  const blob = await new Promise((resolve) => storyCard.toBlob(resolve, "image/png"));
+  const file = new File([blob], "enneagram-story.png", { type: "image/png" });
+  const text = `${resultType.textContent} - ${resultTitle.textContent}\nCoba tesnya di ${pageUrl}`;
+
+  if (navigator.canShare && navigator.canShare({ files: [file] })) {
+    await navigator.share({ title, text, files: [file] });
+    return true;
+  }
+
+  return false;
+}
+
+async function shareToInstagram() {
+  if (!(await shareStoryCard("Share ke Instagram"))) {
+    downloadStoryCard();
+  }
+}
+
+function shareToFacebook() {
+  const url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(pageUrl)}`;
+  window.open(url, "_blank", "noopener,noreferrer");
+}
+
+function shareToWhatsApp() {
+  const text = `${resultType.textContent} - ${resultTitle.textContent}\nCoba tes Enneagram ini: ${pageUrl}`;
+  window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, "_blank", "noopener,noreferrer");
 }

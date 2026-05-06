@@ -318,7 +318,8 @@ h1 {
 }
 
 .summary,
-.chart {
+.chart,
+.share-panel {
   border: 1px solid var(--line);
   border-radius: 8px;
   background: var(--panel);
@@ -378,6 +379,26 @@ h1 {
 
 .instinct-fill {
   background: linear-gradient(90deg, var(--red), var(--yellow));
+}
+
+.share-panel {
+  display: grid;
+  gap: 18px;
+}
+
+#story-card {
+  width: min(260px, 100%);
+  height: auto;
+  justify-self: center;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #101512;
+}
+
+.share-actions {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
 }
 
 .hidden {
@@ -461,9 +482,14 @@ h1 {
   }
 
   .result-actions,
-  .quiz-footer {
+  .quiz-footer,
+  .share-actions {
     align-items: stretch;
     flex-direction: column;
+  }
+
+  .share-actions {
+    grid-template-columns: 1fr;
   }
 
   .primary-button,
