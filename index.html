@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Enneagram Test</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <section class="app" aria-labelledby="app-title">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">Personality test</p>
+            <h1 id="app-title">Enneagram</h1>
+          </div>
+          <button class="ghost-button" id="reset-button" type="button">Reset</button>
+        </header>
+
+        <section class="intro" id="intro-view">
+          <div class="intro-copy">
+            <h2>Kenali motivasi yang paling sering menggerakkanmu.</h2>
+            <p>
+              Jawab 45 pernyataan singkat dengan skala 1 sampai 5. Hasilnya memberi gambaran
+              tipe utama, kemungkinan wing, dan pola yang menonjol.
+            </p>
+            <button class="primary-button" id="start-button" type="button">Mulai tes</button>
+          </div>
+
+          <div class="number-board" aria-hidden="true">
+            <span>1</span><span>2</span><span>3</span>
+            <span>4</span><span>5</span><span>6</span>
+            <span>7</span><span>8</span><span>9</span>
+          </div>
+        </section>
+
+        <section class="quiz hidden" id="quiz-view" aria-live="polite">
+          <div class="progress">
+            <div class="progress-label">
+              <span id="progress-count">1/45</span>
+              <span id="progress-type">Type 1</span>
+            </div>
+            <div class="progress-track" aria-hidden="true">
+              <div class="progress-fill" id="progress-fill"></div>
+            </div>
+          </div>
+
+          <article class="question-card">
+            <p class="eyebrow" id="question-kicker">Nilai 1-5</p>
+            <h2 id="question-text"></h2>
+            <div class="scale" aria-label="Skala jawaban">
+              <button class="scale-button" data-score="1" type="button">
+                <strong>1</strong><span>Sangat tidak cocok</span>
+              </button>
+              <button class="scale-button" data-score="2" type="button">
+                <strong>2</strong><span>Tidak cocok</span>
+              </button>
+              <button class="scale-button" data-score="3" type="button">
+                <strong>3</strong><span>Netral</span>
+              </button>
+              <button class="scale-button" data-score="4" type="button">
+                <strong>4</strong><span>Cocok</span>
+              </button>
+              <button class="scale-button" data-score="5" type="button">
+                <strong>5</strong><span>Sangat cocok</span>
+              </button>
+            </div>
+          </article>
+
+          <footer class="quiz-footer">
+            <button class="ghost-button" id="back-button" type="button">Kembali</button>
+            <span id="answered-count">Belum ada jawaban</span>
+          </footer>
+        </section>
+
+        <section class="result hidden" id="result-view">
+          <div class="result-hero">
+            <p class="eyebrow">Hasil sementara</p>
+            <h2 id="result-type">Type 1</h2>
+            <p id="result-title"></p>
+          </div>
+
+          <div class="result-grid">
+            <article class="summary">
+              <h3>Ringkasan</h3>
+              <p id="result-description"></p>
+              <p class="wing" id="result-wing"></p>
+            </article>
+            <article class="chart" id="score-chart" aria-label="Skor semua tipe"></article>
+          </div>
+
+          <div class="result-actions">
+            <button class="primary-button" id="retake-button" type="button">Ulangi</button>
+            <button class="ghost-button" id="copy-button" type="button">Salin hasil</button>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
