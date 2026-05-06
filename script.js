@@ -161,7 +161,7 @@ scaleButtons.forEach((button) => {
   button.addEventListener("click", () => answerQuestion(Number(button.dataset.score)));
 });
 
-applyTheme(localStorage.getItem("theme") || "light");
+applyTheme(localStorage.getItem("theme") || "dark");
 
 function startQuiz() {
   state.index = 0;
@@ -392,9 +392,6 @@ function renderStoryCard(result) {
   ctx.font = "700 34px Segoe UI, Arial, sans-serif";
   ctx.fillText("ENNEAGRAM RESULT", 148, 210);
 
-  ctx.fillStyle = accent;
-  ctx.fillRect(148, 245, 124, 6);
-
   drawStorySection(ctx, {
     y: 322,
     label: "CORE TYPE",
@@ -432,17 +429,19 @@ function renderStoryCard(result) {
 
 function drawBackground(ctx, accent) {
   const gradient = ctx.createLinearGradient(0, 0, 1080, 1920);
-  gradient.addColorStop(0, "#0d1210");
-  gradient.addColorStop(0.55, "#171d19");
-  gradient.addColorStop(1, "#0b0f0d");
+  gradient.addColorStop(0, "#07101f");
+  gradient.addColorStop(0.55, "#0d1a2d");
+  gradient.addColorStop(1, "#050a14");
   ctx.fillStyle = gradient;
   ctx.fillRect(0, 0, 1080, 1920);
 
   ctx.globalAlpha = 0.14;
-  ctx.fillStyle = accent;
+  ctx.fillStyle = "#4e7cc7";
   ctx.beginPath();
   ctx.arc(875, 290, 270, 0, Math.PI * 2);
   ctx.fill();
+  ctx.globalAlpha = 0.1;
+  ctx.fillStyle = accent;
   ctx.beginPath();
   ctx.arc(180, 1660, 330, 0, Math.PI * 2);
   ctx.fill();
@@ -460,17 +459,19 @@ function drawPanel(ctx, x, y, width, height, radius) {
 }
 
 function drawStorySection(ctx, section) {
+  ctx.textAlign = "center";
   ctx.fillStyle = section.accent;
   ctx.font = "800 30px Segoe UI, Arial, sans-serif";
-  ctx.fillText(section.label, 148, section.y);
+  ctx.fillText(section.label, 540, section.y);
 
   ctx.fillStyle = "#f7f2e8";
   ctx.font = "900 132px Segoe UI, Arial, sans-serif";
-  ctx.fillText(section.main, 148, section.y + 172);
+  ctx.fillText(section.main, 540, section.y + 172);
 
   ctx.fillStyle = "rgba(247, 242, 232, 0.68)";
   ctx.font = "500 40px Segoe UI, Arial, sans-serif";
-  wrapCanvasText(ctx, section.sub, 150, section.y + 294, 780, 54);
+  wrapCanvasText(ctx, section.sub, 540, section.y + 294, 780, 54, "center");
+  ctx.textAlign = "left";
 }
 
 function drawStoryDivider(ctx, y) {
@@ -482,9 +483,10 @@ function drawStoryDivider(ctx, y) {
   ctx.stroke();
 }
 
-function wrapCanvasText(ctx, text, x, y, maxWidth, lineHeight) {
+function wrapCanvasText(ctx, text, x, y, maxWidth, lineHeight, align = "left") {
   const words = text.split(" ");
   let line = "";
+  ctx.textAlign = align;
 
   words.forEach((word) => {
     const nextLine = line ? `${line} ${word}` : word;
@@ -498,6 +500,7 @@ function wrapCanvasText(ctx, text, x, y, maxWidth, lineHeight) {
   });
 
   ctx.fillText(line, x, y);
+  ctx.textAlign = "left";
 }
 
 function getInstinctAccent(instinct) {
