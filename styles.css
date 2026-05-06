@@ -333,8 +333,18 @@ h1 {
   font-size: 1.04rem;
 }
 
-.wing {
+.detail-list {
+  display: grid;
+  gap: 10px;
+  margin: 18px 0;
+}
+
+.detail-item {
   margin-bottom: 0;
+}
+
+.wing {
+  margin-bottom: 10px;
   font-weight: 800;
 }
 

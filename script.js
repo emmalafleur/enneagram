@@ -85,15 +85,72 @@ const questionBank = [
 ];
 
 const typeInfo = {
-  1: ["The Reformer", "Tipe 1 digerakkan oleh keinginan menjadi baik, benar, dan bertanggung jawab. Kekuatanmu ada pada integritas, ketelitian, dan kemampuan melihat apa yang perlu diperbaiki."],
-  2: ["The Helper", "Tipe 2 digerakkan oleh kebutuhan untuk mencintai dan dicintai lewat dukungan nyata. Kekuatanmu ada pada kehangatan, perhatian, dan kepekaan terhadap kebutuhan orang lain."],
-  3: ["The Achiever", "Tipe 3 digerakkan oleh pencapaian, efektivitas, dan citra kompeten. Kekuatanmu ada pada adaptasi, fokus target, dan kemampuan membuat sesuatu terlihat berhasil."],
-  4: ["The Individualist", "Tipe 4 digerakkan oleh pencarian identitas, kedalaman, dan keaslian. Kekuatanmu ada pada sensitivitas, kreativitas, dan keberanian merasakan hal yang kompleks."],
-  5: ["The Investigator", "Tipe 5 digerakkan oleh kebutuhan memahami dan menjaga kapasitas diri. Kekuatanmu ada pada observasi, analisis, dan kemampuan melihat struktur yang tidak tampak."],
-  6: ["The Loyalist", "Tipe 6 digerakkan oleh keamanan, kepercayaan, dan kesiapan menghadapi risiko. Kekuatanmu ada pada loyalitas, kewaspadaan, dan kemampuan membaca potensi masalah."],
-  7: ["The Enthusiast", "Tipe 7 digerakkan oleh kebebasan, pilihan, dan pengalaman baru. Kekuatanmu ada pada optimisme, ide segar, dan kemampuan membuka jalan saat suasana terasa buntu."],
-  8: ["The Challenger", "Tipe 8 digerakkan oleh kemandirian, kekuatan, dan perlindungan. Kekuatanmu ada pada keberanian, kejujuran langsung, dan energi untuk menghadapi hal sulit."],
-  9: ["The Peacemaker", "Tipe 9 digerakkan oleh harmoni, kestabilan, dan rasa terhubung. Kekuatanmu ada pada ketenangan, penerimaan, dan kemampuan menyatukan sudut pandang berbeda."]
+  1: ["The Reformer", "Tipe 1 biasanya digerakkan oleh dorongan untuk hidup benar, bertanggung jawab, dan memperbaiki hal yang belum sesuai standar. Kamu cenderung peka terhadap detail yang keliru, punya kompas moral kuat, dan ingin hasil kerja terasa bersih serta bisa dipertanggungjawabkan."],
+  2: ["The Helper", "Tipe 2 biasanya digerakkan oleh kebutuhan untuk terhubung lewat perhatian, dukungan, dan rasa dibutuhkan. Kamu mudah membaca kebutuhan orang, cepat memberi bantuan, dan sering menjadi orang yang membuat relasi terasa hangat serta personal."],
+  3: ["The Achiever", "Tipe 3 biasanya digerakkan oleh pencapaian, efektivitas, dan keinginan terlihat kompeten. Kamu cepat menangkap ekspektasi, bisa menyesuaikan gaya untuk mencapai hasil, dan punya energi kuat untuk membuat sesuatu terlihat berhasil."],
+  4: ["The Individualist", "Tipe 4 biasanya digerakkan oleh pencarian identitas, kedalaman emosi, dan keaslian. Kamu peka pada nuansa yang tidak selalu terlihat orang lain, punya imajinasi kuat, dan ingin hidup terasa personal, bermakna, bukan sekadar biasa."],
+  5: ["The Investigator", "Tipe 5 biasanya digerakkan oleh kebutuhan memahami, menjaga kapasitas, dan punya ruang mental yang cukup. Kamu kuat dalam observasi, analisis, dan membangun pemahaman sebelum bergerak, terutama saat situasi terasa kompleks atau menuntut."],
+  6: ["The Loyalist", "Tipe 6 biasanya digerakkan oleh keamanan, kepercayaan, dan kesiapan menghadapi risiko. Kamu peka terhadap kemungkinan masalah, loyal pada orang atau sistem yang terbukti, dan sering menjadi orang yang menjaga kelompok tetap realistis."],
+  7: ["The Enthusiast", "Tipe 7 biasanya digerakkan oleh kebebasan, pilihan, dan pengalaman yang membuat hidup terasa terbuka. Kamu cepat melihat kemungkinan baru, membawa energi ringan ke situasi berat, dan suka mencari jalan keluar yang kreatif saat suasana terasa sempit."],
+  8: ["The Challenger", "Tipe 8 biasanya digerakkan oleh kemandirian, kekuatan, dan keinginan melindungi diri maupun orang yang dianggap penting. Kamu cenderung lugas, berani menghadapi konflik, dan cepat mengambil posisi saat sesuatu terasa tidak adil atau terlalu lemah."],
+  9: ["The Peacemaker", "Tipe 9 biasanya digerakkan oleh harmoni, kestabilan, dan rasa terhubung. Kamu mudah melihat banyak sisi, menenangkan suasana, dan sering menjadi jembatan ketika orang lain terlalu keras mempertahankan posisinya."]
+};
+
+const typeDetails = {
+  1: {
+    focus: "Fokus perhatianmu sering tertuju pada apa yang bisa diperbaiki, dirapikan, atau dibuat lebih benar.",
+    strength: "Kekuatan utama: integritas, disiplin, rasa tanggung jawab, dan kemampuan menjaga standar.",
+    blind: "Blind spot: terlalu keras pada diri sendiri atau orang lain saat realitas tidak sesuai ideal.",
+    growth: "Growth cue: izinkan proses menjadi cukup baik dulu sebelum mengejar sempurna."
+  },
+  2: {
+    focus: "Fokus perhatianmu sering tertuju pada kebutuhan emosional orang lain dan kualitas kedekatan dalam relasi.",
+    strength: "Kekuatan utama: empati, kehangatan, dukungan praktis, dan kemampuan membuat orang merasa dilihat.",
+    blind: "Blind spot: sulit mengakui kebutuhan sendiri karena terlalu sibuk menjadi penting bagi orang lain.",
+    growth: "Growth cue: bantu tanpa kehilangan batas, dan latih meminta secara langsung."
+  },
+  3: {
+    focus: "Fokus perhatianmu sering tertuju pada target, impresi, performa, dan ukuran keberhasilan yang jelas.",
+    strength: "Kekuatan utama: adaptif, efisien, ambisi sehat, dan kemampuan mengubah ide menjadi hasil.",
+    blind: "Blind spot: mengira nilai diri hanya aman saat produktif, berhasil, atau dikagumi.",
+    growth: "Growth cue: bedakan pencapaian yang terlihat bagus dari hal yang benar-benar kamu inginkan."
+  },
+  4: {
+    focus: "Fokus perhatianmu sering tertuju pada identitas, makna personal, rasa kehilangan, dan apa yang terasa autentik.",
+    strength: "Kekuatan utama: kedalaman emosi, kreativitas, kejujuran batin, dan selera yang kuat.",
+    blind: "Blind spot: terlalu lama tinggal di perasaan kurang, berbeda, atau tidak dimengerti.",
+    growth: "Growth cue: jadikan emosi sebagai informasi, bukan satu-satunya realitas."
+  },
+  5: {
+    focus: "Fokus perhatianmu sering tertuju pada informasi, batas energi, privasi, dan pemahaman yang presisi.",
+    strength: "Kekuatan utama: objektivitas, observasi tajam, kemandirian berpikir, dan kedalaman analisis.",
+    blind: "Blind spot: menunda hidup sampai merasa cukup siap atau cukup tahu.",
+    growth: "Growth cue: terlibat sedikit lebih awal, bahkan saat belum semua variabel jelas."
+  },
+  6: {
+    focus: "Fokus perhatianmu sering tertuju pada kepercayaan, stabilitas, tanda bahaya, dan siapa yang bisa diandalkan.",
+    strength: "Kekuatan utama: loyalitas, kesiapan, keberanian realistis, dan kemampuan membaca risiko.",
+    blind: "Blind spot: pikiran bisa terus mencari skenario buruk sampai sulit percaya pada keputusan sendiri.",
+    growth: "Growth cue: gunakan kewaspadaan sebagai alat, bukan tempat tinggal."
+  },
+  7: {
+    focus: "Fokus perhatianmu sering tertuju pada pilihan, peluang baru, dan cara menjaga hidup tetap bergerak.",
+    strength: "Kekuatan utama: optimisme, ide cepat, spontanitas, dan kemampuan membuka suasana.",
+    blind: "Blind spot: menghindari rasa sakit atau kebosanan dengan terus mengejar opsi berikutnya.",
+    growth: "Growth cue: bertahan sedikit lebih lama pada satu hal bisa membuat kebebasanmu lebih dalam."
+  },
+  8: {
+    focus: "Fokus perhatianmu sering tertuju pada kekuatan, kontrol diri, keadilan, dan siapa yang perlu dilindungi.",
+    strength: "Kekuatan utama: keberanian, ketegasan, proteksi, dan energi untuk menghadapi hal sulit.",
+    blind: "Blind spot: terlihat kuat terus bisa membuat sisi lembutmu sulit dijangkau orang lain.",
+    growth: "Growth cue: kerentanan yang dipilih sadar bukan kelemahan, tapi bentuk kontrol yang lebih dewasa."
+  },
+  9: {
+    focus: "Fokus perhatianmu sering tertuju pada ketenangan, kenyamanan bersama, dan menghindari gesekan yang tidak perlu.",
+    strength: "Kekuatan utama: penerimaan, stabilitas, kesabaran, dan kemampuan menyatukan perspektif.",
+    blind: "Blind spot: terlalu lama menunda sikap pribadi agar suasana tetap aman.",
+    growth: "Growth cue: suaramu tetap penting meski tidak semua orang langsung sepakat."
+  }
 };
 
 const wings = {
@@ -134,6 +191,7 @@ const scaleButtons = document.querySelectorAll(".scale-button");
 const resultType = document.querySelector("#result-type");
 const resultTitle = document.querySelector("#result-title");
 const resultDescription = document.querySelector("#result-description");
+const resultDetails = document.querySelector("#result-details");
 const resultWing = document.querySelector("#result-wing");
 const scoreChart = document.querySelector("#score-chart");
 const resultInstinct = document.querySelector("#result-instinct");
@@ -264,6 +322,7 @@ function showResult() {
   resultType.textContent = `Type ${primary} ${instinctStack[0]}/${instinctStack[1]}`;
   resultTitle.textContent = title;
   resultDescription.textContent = description;
+  renderResultDetails(primary);
   resultWing.textContent = `Kemungkinan wing: ${primary}w${wing}. Wing dipilih dari tipe tetangga dengan skor tertinggi.`;
   resultInstinct.textContent = `Dominan ${instinctStack[0].toUpperCase()} berarti ${instinctInfo[instinctStack[0]][1]}.`;
   renderChart(scores, instinctScores);
@@ -340,6 +399,18 @@ function renderChart(scores, instinctScores) {
   });
 }
 
+function renderResultDetails(primary) {
+  const details = typeDetails[primary];
+  resultDetails.innerHTML = "";
+
+  Object.entries(details).forEach(([key, text]) => {
+    const item = document.createElement("p");
+    item.className = "detail-item";
+    item.textContent = text;
+    resultDetails.appendChild(item);
+  });
+}
+
 function shuffleQuestions(items) {
   const shuffled = [...items];
 
@@ -388,32 +459,28 @@ function renderStoryCard(result) {
   drawBackground(ctx, accent);
   drawPanel(ctx, 92, 116, 896, 1550, 48);
 
-  ctx.fillStyle = "#eae5dc";
-  ctx.font = "700 34px Segoe UI, Arial, sans-serif";
-  ctx.fillText("ENNEAGRAM RESULT", 148, 210);
-
   drawStorySection(ctx, {
-    y: 322,
+    y: 250,
     label: "CORE TYPE",
     main: `type ${primary}`,
     sub: title,
     accent
   });
 
-  drawStoryDivider(ctx, 690);
+  drawStoryDivider(ctx, 640);
 
   drawStorySection(ctx, {
-    y: 770,
+    y: 720,
     label: "WING",
     main: `${primary}w${wing}`,
     sub: getWingLabel(primary, wing),
     accent
   });
 
-  drawStoryDivider(ctx, 1138);
+  drawStoryDivider(ctx, 1090);
 
   drawStorySection(ctx, {
-    y: 1218,
+    y: 1170,
     label: "INSTINCTUAL STACK",
     main: `${instinctStack[0]}/${instinctStack[1]}`,
     sub: `${instinctInfo[instinctStack[0]][0]} + ${instinctInfo[instinctStack[1]][0]}`,
