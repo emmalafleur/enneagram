@@ -13,8 +13,8 @@ const types = {
 
 const server = http.createServer((request, response) => {
   const url = new URL(request.url, `http://${request.headers.host}`);
-  const normalized = path.normalize(url.pathname).replace(/^(\.\.[/\\])+/, "");
-  const requested = normalized === "/" ? "/index.html" : normalized;
+  const normalized = path.normalize(decodeURIComponent(url.pathname)).replace(/^(\.\.[/\\])+/, "");
+  const requested = normalized === "/" || normalized === "\\" ? "index.html" : normalized.replace(/^[/\\]/, "");
   const filePath = path.join(root, requested);
 
   if (!filePath.startsWith(root)) {

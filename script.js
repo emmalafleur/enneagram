@@ -1,4 +1,4 @@
-const questions = [
+const enneagramQuestions = [
   [1, "Aku sering merasa perlu memperbaiki sesuatu agar sesuai standar yang benar."],
   [2, "Aku merasa berarti saat bisa membantu orang merasa diperhatikan."],
   [3, "Aku terdorong untuk menunjukkan hasil yang bisa dilihat dan dihargai."],
@@ -46,6 +46,32 @@ const questions = [
   [9, "Aku takut konflik membuatku kehilangan koneksi atau ketenangan."]
 ];
 
+const instinctQuestions = [
+  ["sp", "Aku sering memperhatikan kenyamanan tubuh, uang, waktu, dan energi pribadiku."],
+  ["sx", "Aku tertarik pada koneksi yang intens, personal, dan terasa penuh daya tarik."],
+  ["so", "Aku peka terhadap dinamika kelompok, reputasi, dan posisi dalam komunitas."],
+  ["sp", "Aku merasa tenang saat kebutuhan dasar dan rutinitas hidupku terkendali."],
+  ["sx", "Aku cepat merasa hidup saat ada chemistry kuat dengan seseorang atau sebuah minat."],
+  ["so", "Aku suka memahami peran orang-orang dan bagaimana sebuah lingkaran sosial bekerja."],
+  ["sp", "Aku mudah cemas jika sumber daya, kesehatan, atau ruang pribadiku terasa terancam."],
+  ["sx", "Aku mencari pengalaman yang membuatku merasa benar-benar terhubung dan menyala."],
+  ["so", "Aku sering memikirkan bagaimana tindakanku berdampak pada kelompok atau jaringan."],
+  ["sp", "Aku cenderung membangun rasa aman lewat kebiasaan, tabungan, atau lingkungan yang nyaman."],
+  ["sx", "Aku lebih memilih sedikit hubungan yang intens daripada banyak hubungan yang datar."],
+  ["so", "Aku memperhatikan apakah aku diterima, dibutuhkan, atau punya kontribusi di komunitas."],
+  ["sp", "Aku bisa sangat protektif terhadap waktu istirahat dan kapasitas pribadiku."],
+  ["sx", "Aku mudah terdorong oleh rasa penasaran yang kuat terhadap orang, ide, atau pengalaman tertentu."],
+  ["so", "Aku suka menjadi bagian dari sesuatu yang lebih besar daripada diriku sendiri."],
+  ["sp", "Saat stres, aku biasanya kembali ke hal praktis: makan, tidur, tempat, uang, dan jadwal."],
+  ["sx", "Saat stres, aku mencari sesuatu yang terasa intens agar tidak mati rasa."],
+  ["so", "Saat stres, aku menilai ulang hubungan, status, atau rasa tempatku di antara orang lain."]
+];
+
+const questions = [
+  ...enneagramQuestions.map(([type, text]) => ({ kind: "enneagram", type, text })),
+  ...instinctQuestions.map(([instinct, text]) => ({ kind: "instinct", instinct, text }))
+];
+
 const typeInfo = {
   1: ["The Reformer", "Tipe 1 digerakkan oleh keinginan menjadi baik, benar, dan bertanggung jawab. Kekuatanmu ada pada integritas, ketelitian, dan kemampuan melihat apa yang perlu diperbaiki."],
   2: ["The Helper", "Tipe 2 digerakkan oleh kebutuhan untuk mencintai dan dicintai lewat dukungan nyata. Kekuatanmu ada pada kehangatan, perhatian, dan kepekaan terhadap kebutuhan orang lain."],
@@ -70,6 +96,12 @@ const wings = {
   9: [8, 1]
 };
 
+const instinctInfo = {
+  sp: ["Self-preservation", "fokus pada keamanan, tubuh, sumber daya, kenyamanan, dan kestabilan hidup sehari-hari"],
+  sx: ["Sexual / One-to-one", "fokus pada intensitas, daya tarik, chemistry, dan koneksi personal yang terasa hidup"],
+  so: ["Social", "fokus pada kelompok, kontribusi, reputasi, jaringan, dan rasa menjadi bagian dari sesuatu"]
+};
+
 const state = {
   index: 0,
   answers: []
@@ -91,16 +123,21 @@ const resultTitle = document.querySelector("#result-title");
 const resultDescription = document.querySelector("#result-description");
 const resultWing = document.querySelector("#result-wing");
 const scoreChart = document.querySelector("#score-chart");
+const resultInstinct = document.querySelector("#result-instinct");
+const themeButton = document.querySelector("#theme-button");
 
 document.querySelector("#start-button").addEventListener("click", startQuiz);
 document.querySelector("#reset-button").addEventListener("click", resetQuiz);
 document.querySelector("#retake-button").addEventListener("click", resetQuiz);
 document.querySelector("#copy-button").addEventListener("click", copyResult);
+themeButton.addEventListener("click", toggleTheme);
 backButton.addEventListener("click", goBack);
 
 scaleButtons.forEach((button) => {
   button.addEventListener("click", () => answerQuestion(Number(button.dataset.score)));
 });
+
+applyTheme(localStorage.getItem("theme") || "light");
 
 function startQuiz() {
   introView.classList.add("hidden");
@@ -110,14 +147,15 @@ function startQuiz() {
 }
 
 function renderQuestion() {
-  const [type, text] = questions[state.index];
+  const question = questions[state.index];
   const currentAnswer = state.answers[state.index];
+  const phaseLabel = question.kind === "enneagram" ? "Enneagram" : "Instinct";
 
-  questionText.textContent = text;
-  questionKicker.textContent = "Nilai 1-5";
-  progressType.textContent = `Type ${type}`;
+  questionText.textContent = question.text;
+  questionKicker.textContent = question.kind === "enneagram" ? "Nilai 1-5" : "Instinct sp/sx/so";
+  progressType.textContent = phaseLabel;
   progressCount.textContent = `${state.index + 1}/${questions.length}`;
-  progressFill.style.width = `${(state.index / questions.length) * 100}%`;
+  progressFill.style.width = `${((state.index + 1) / questions.length) * 100}%`;
   answeredCount.textContent = state.answers.length ? `${state.answers.length} jawaban tersimpan` : "Belum ada jawaban";
   backButton.disabled = state.index === 0;
 
@@ -156,8 +194,22 @@ function resetQuiz() {
 function calculateScores() {
   const scores = Object.fromEntries(Array.from({ length: 9 }, (_, index) => [index + 1, 0]));
 
-  questions.forEach(([type], index) => {
-    scores[type] += state.answers[index] || 0;
+  questions.forEach((question, index) => {
+    if (question.kind === "enneagram") {
+      scores[question.type] += state.answers[index] || 0;
+    }
+  });
+
+  return scores;
+}
+
+function calculateInstinctScores() {
+  const scores = { sp: 0, sx: 0, so: 0 };
+
+  questions.forEach((question, index) => {
+    if (question.kind === "instinct") {
+      scores[question.instinct] += state.answers[index] || 0;
+    }
   });
 
   return scores;
@@ -165,11 +217,13 @@ function calculateScores() {
 
 function showResult() {
   const scores = calculateScores();
+  const instinctScores = calculateInstinctScores();
   const sorted = Object.entries(scores)
     .map(([type, score]) => ({ type: Number(type), score }))
     .sort((a, b) => b.score - a.score || a.type - b.type);
   const primary = sorted[0].type;
   const wing = getWing(primary, scores);
+  const instinctStack = getInstinctStack(instinctScores);
   const [title, description] = typeInfo[primary];
 
   quizView.classList.add("hidden");
@@ -178,7 +232,8 @@ function showResult() {
   resultTitle.textContent = title;
   resultDescription.textContent = description;
   resultWing.textContent = `Kemungkinan wing: ${primary}w${wing}. Wing dipilih dari tipe tetangga dengan skor tertinggi.`;
-  renderChart(scores);
+  resultInstinct.textContent = `Instinct stack: ${instinctStack.join("/")}. Dominan ${instinctStack[0].toUpperCase()} berarti ${instinctInfo[instinctStack[0]][1]}.`;
+  renderChart(scores, instinctScores);
 }
 
 function getWing(primary, scores) {
@@ -186,9 +241,19 @@ function getWing(primary, scores) {
   return scores[left] >= scores[right] ? left : right;
 }
 
-function renderChart(scores) {
+function getInstinctStack(scores) {
+  return Object.entries(scores)
+    .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+    .map(([instinct]) => instinct);
+}
+
+function renderChart(scores, instinctScores) {
   const max = Math.max(...Object.values(scores));
   scoreChart.innerHTML = "";
+
+  const typeHeading = document.createElement("h3");
+  typeHeading.textContent = "Skor Enneagram";
+  scoreChart.appendChild(typeHeading);
 
   Object.entries(scores).forEach(([type, score]) => {
     const percent = max ? Math.round((score / max) * 100) : 0;
@@ -206,10 +271,44 @@ function renderChart(scores) {
     `;
     scoreChart.appendChild(row);
   });
+
+  const instinctHeading = document.createElement("h3");
+  instinctHeading.className = "chart-heading";
+  instinctHeading.textContent = "Instinct sp/sx/so";
+  scoreChart.appendChild(instinctHeading);
+
+  const instinctMax = Math.max(...Object.values(instinctScores));
+  Object.entries(instinctScores).forEach(([instinct, score]) => {
+    const percent = instinctMax ? Math.round((score / instinctMax) * 100) : 0;
+    const [title] = instinctInfo[instinct];
+    const row = document.createElement("div");
+    row.className = "bar-row instinct-row";
+    row.innerHTML = `
+      <div class="bar-label">
+        <span>${instinct.toUpperCase()} ${title}</span>
+        <span>${score}</span>
+      </div>
+      <div class="bar-track">
+        <div class="bar-fill instinct-fill" style="width:${percent}%"></div>
+      </div>
+    `;
+    scoreChart.appendChild(row);
+  });
+}
+
+function applyTheme(theme) {
+  document.documentElement.dataset.theme = theme;
+  themeButton.textContent = theme === "dark" ? "Light" : "Dark";
+  localStorage.setItem("theme", theme);
+}
+
+function toggleTheme() {
+  const nextTheme = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+  applyTheme(nextTheme);
 }
 
 async function copyResult() {
-  const text = `${resultType.textContent} - ${resultTitle.textContent}\n${resultDescription.textContent}\n${resultWing.textContent}`;
+  const text = `${resultType.textContent} - ${resultTitle.textContent}\n${resultDescription.textContent}\n${resultWing.textContent}\n${resultInstinct.textContent}`;
   const button = document.querySelector("#copy-button");
 
   try {

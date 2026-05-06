@@ -14,15 +14,18 @@
             <p class="eyebrow">Personality test</p>
             <h1 id="app-title">Enneagram</h1>
           </div>
-          <button class="ghost-button" id="reset-button" type="button">Reset</button>
+          <div class="top-actions">
+            <button class="ghost-button theme-button" id="theme-button" type="button">Dark</button>
+            <button class="ghost-button" id="reset-button" type="button">Reset</button>
+          </div>
         </header>
 
         <section class="intro" id="intro-view">
           <div class="intro-copy">
             <h2>Kenali motivasi yang paling sering menggerakkanmu.</h2>
             <p>
-              Jawab 45 pernyataan singkat dengan skala 1 sampai 5. Hasilnya memberi gambaran
-              tipe utama, kemungkinan wing, dan pola yang menonjol.
+              Jawab 63 pernyataan singkat dengan skala 1 sampai 5. Hasilnya memberi gambaran
+              tipe utama, kemungkinan wing, dan instinct stack sp/sx/so.
             </p>
             <button class="primary-button" id="start-button" type="button">Mulai tes</button>
           </div>
@@ -37,8 +40,8 @@
         <section class="quiz hidden" id="quiz-view" aria-live="polite">
           <div class="progress">
             <div class="progress-label">
-              <span id="progress-count">1/45</span>
-              <span id="progress-type">Type 1</span>
+              <span id="progress-count">1/63</span>
+              <span id="progress-type">Enneagram</span>
             </div>
             <div class="progress-track" aria-hidden="true">
               <div class="progress-fill" id="progress-fill"></div>
@@ -85,6 +88,7 @@
               <h3>Ringkasan</h3>
               <p id="result-description"></p>
               <p class="wing" id="result-wing"></p>
+              <p class="wing" id="result-instinct"></p>
             </article>
             <article class="chart" id="score-chart" aria-label="Skor semua tipe"></article>
           </div>

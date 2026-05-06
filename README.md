@@ -4,9 +4,10 @@ Aplikasi tes Enneagram ringan berbasis HTML, CSS, dan JavaScript vanilla.
 
 ## Fitur
 
-- 45 pertanyaan skala 1 sampai 5
+- 45 pertanyaan Enneagram dan 18 pertanyaan instinct
 - Skor untuk 9 tipe Enneagram
-- Hasil tipe utama, kemungkinan wing, dan chart skor
+- Hasil tipe utama, kemungkinan wing, instinct stack sp/sx/so, dan chart skor
+- Mode light/dark
 - Responsive untuk desktop dan mobile
 - Tidak membutuhkan dependency
 
