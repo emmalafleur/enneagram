@@ -340,6 +340,12 @@ h1 {
   margin-bottom: 14px;
 }
 
+.chart-note {
+  margin-bottom: 18px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
 .chart-heading {
   margin-top: 24px;
 }

@@ -67,9 +67,21 @@ const instinctQuestions = [
   ["so", "Saat stres, aku menilai ulang hubungan, status, atau rasa tempatku di antara orang lain."]
 ];
 
-const questions = [
-  ...enneagramQuestions.map(([type, text]) => ({ kind: "enneagram", type, text })),
-  ...instinctQuestions.map(([instinct, text]) => ({ kind: "instinct", instinct, text }))
+const enneagramWeights = [1, 1.12, 0.94, 1.08, 0.98];
+const instinctWeights = [1, 1.08, 0.94, 1.12, 0.98, 1.04];
+const questionBank = [
+  ...enneagramQuestions.map(([type, text], index) => ({
+    kind: "enneagram",
+    type,
+    text,
+    weight: enneagramWeights[Math.floor(index / 9)]
+  })),
+  ...instinctQuestions.map(([instinct, text], index) => ({
+    kind: "instinct",
+    instinct,
+    text,
+    weight: instinctWeights[Math.floor(index / 3)]
+  }))
 ];
 
 const typeInfo = {
@@ -102,12 +114,10 @@ const instinctInfo = {
   so: ["Social", "fokus pada kelompok, kontribusi, reputasi, jaringan, dan rasa menjadi bagian dari sesuatu"]
 };
 
-const enneagramMax = 5 * 4;
-const instinctMax = 6 * 4;
-
 const state = {
   index: 0,
-  answers: []
+  answers: [],
+  questions: []
 };
 
 const introView = document.querySelector("#intro-view");
@@ -143,6 +153,9 @@ scaleButtons.forEach((button) => {
 applyTheme(localStorage.getItem("theme") || "light");
 
 function startQuiz() {
+  state.index = 0;
+  state.answers = [];
+  state.questions = shuffleQuestions(questionBank);
   introView.classList.add("hidden");
   resultView.classList.add("hidden");
   quizView.classList.remove("hidden");
@@ -150,15 +163,15 @@ function startQuiz() {
 }
 
 function renderQuestion() {
-  const question = questions[state.index];
+  const question = state.questions[state.index];
   const currentAnswer = state.answers[state.index];
   const phaseLabel = question.kind === "enneagram" ? "Enneagram" : "Instinct";
 
   questionText.textContent = question.text;
   questionKicker.textContent = question.kind === "enneagram" ? "Nilai 1-5" : "Instinct sp/sx/so";
   progressType.textContent = phaseLabel;
-  progressCount.textContent = `${state.index + 1}/${questions.length}`;
-  progressFill.style.width = `${((state.index + 1) / questions.length) * 100}%`;
+  progressCount.textContent = `${state.index + 1}/${state.questions.length}`;
+  progressFill.style.width = `${((state.index + 1) / state.questions.length) * 100}%`;
   answeredCount.textContent = state.answers.length ? `${state.answers.length} jawaban tersimpan` : "Belum ada jawaban";
   backButton.disabled = state.index === 0;
 
@@ -170,7 +183,7 @@ function renderQuestion() {
 function answerQuestion(score) {
   state.answers[state.index] = score;
 
-  if (state.index === questions.length - 1) {
+  if (state.index === state.questions.length - 1) {
     progressFill.style.width = "100%";
     showResult();
     return;
@@ -189,6 +202,7 @@ function goBack() {
 function resetQuiz() {
   state.index = 0;
   state.answers = [];
+  state.questions = [];
   quizView.classList.add("hidden");
   resultView.classList.add("hidden");
   introView.classList.remove("hidden");
@@ -196,26 +210,30 @@ function resetQuiz() {
 
 function calculateScores() {
   const scores = Object.fromEntries(Array.from({ length: 9 }, (_, index) => [index + 1, 0]));
+  const weights = Object.fromEntries(Array.from({ length: 9 }, (_, index) => [index + 1, 0]));
 
-  questions.forEach((question, index) => {
+  state.questions.forEach((question, index) => {
     if (question.kind === "enneagram") {
-      scores[question.type] += Math.max((state.answers[index] || 1) - 1, 0);
+      scores[question.type] += (state.answers[index] || 1) * question.weight;
+      weights[question.type] += question.weight;
     }
   });
 
-  return scores;
+  return Object.fromEntries(Object.entries(scores).map(([type, score]) => [type, score / weights[type]]));
 }
 
 function calculateInstinctScores() {
   const scores = { sp: 0, sx: 0, so: 0 };
+  const weights = { sp: 0, sx: 0, so: 0 };
 
-  questions.forEach((question, index) => {
+  state.questions.forEach((question, index) => {
     if (question.kind === "instinct") {
-      scores[question.instinct] += Math.max((state.answers[index] || 1) - 1, 0);
+      scores[question.instinct] += (state.answers[index] || 1) * question.weight;
+      weights[question.instinct] += question.weight;
     }
   });
 
-  return scores;
+  return Object.fromEntries(Object.entries(scores).map(([instinct, score]) => [instinct, score / weights[instinct]]));
 }
 
 function showResult() {
@@ -252,6 +270,14 @@ function getInstinctStack(scores) {
 
 function renderChart(scores, instinctScores) {
   scoreChart.innerHTML = "";
+  const topScores = Object.values(scores).sort((a, b) => b - a);
+
+  if (topScores[0] - topScores[1] <= 0.18) {
+    const notice = document.createElement("p");
+    notice.className = "chart-note";
+    notice.textContent = "Skor teratas dekat. Baca hasil ini sebagai kandidat utama, bukan kepastian.";
+    scoreChart.appendChild(notice);
+  }
 
   const typeHeading = document.createElement("h3");
   typeHeading.textContent = "Skor Enneagram";
@@ -260,17 +286,17 @@ function renderChart(scores, instinctScores) {
   Object.entries(scores)
     .sort((a, b) => b[1] - a[1] || Number(a[0]) - Number(b[0]))
     .forEach(([type, score]) => {
-    const percent = Math.round((score / enneagramMax) * 100);
+    const percent = ((score - 1) / 4) * 100;
     const [title] = typeInfo[type];
     const row = document.createElement("div");
     row.className = "bar-row";
     row.innerHTML = `
       <div class="bar-label">
         <span>Type ${type} ${title}</span>
-        <span>${percent}%</span>
+        <span>${percent.toFixed(1)}%</span>
       </div>
       <div class="bar-track">
-        <div class="bar-fill" style="width:${percent}%"></div>
+        <div class="bar-fill" style="width:${Math.max(percent, 2).toFixed(2)}%"></div>
       </div>
     `;
     scoreChart.appendChild(row);
@@ -284,21 +310,32 @@ function renderChart(scores, instinctScores) {
   Object.entries(instinctScores)
     .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
     .forEach(([instinct, score]) => {
-    const percent = Math.round((score / instinctMax) * 100);
+    const percent = ((score - 1) / 4) * 100;
     const [title] = instinctInfo[instinct];
     const row = document.createElement("div");
     row.className = "bar-row instinct-row";
     row.innerHTML = `
       <div class="bar-label">
         <span>${instinct.toUpperCase()} ${title}</span>
-        <span>${percent}%</span>
+        <span>${percent.toFixed(1)}%</span>
       </div>
       <div class="bar-track">
-        <div class="bar-fill instinct-fill" style="width:${percent}%"></div>
+        <div class="bar-fill instinct-fill" style="width:${Math.max(percent, 2).toFixed(2)}%"></div>
       </div>
     `;
     scoreChart.appendChild(row);
   });
+}
+
+function shuffleQuestions(items) {
+  const shuffled = [...items];
+
+  for (let index = shuffled.length - 1; index > 0; index -= 1) {
+    const swapIndex = Math.floor(Math.random() * (index + 1));
+    [shuffled[index], shuffled[swapIndex]] = [shuffled[swapIndex], shuffled[index]];
+  }
+
+  return shuffled;
 }
 
 function applyTheme(theme) {
