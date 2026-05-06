@@ -386,7 +386,7 @@ function renderStoryCard(result) {
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   drawBackground(ctx, accent);
-  drawPanel(ctx, 92, 116, 896, 1602, 48);
+  drawPanel(ctx, 92, 116, 896, 1550, 48);
 
   ctx.fillStyle = "#eae5dc";
   ctx.font = "700 34px Segoe UI, Arial, sans-serif";
@@ -396,27 +396,27 @@ function renderStoryCard(result) {
   ctx.fillRect(148, 245, 124, 6);
 
   drawStorySection(ctx, {
-    y: 330,
+    y: 322,
     label: "CORE TYPE",
     main: `type ${primary}`,
     sub: title,
     accent
   });
 
-  drawStoryDivider(ctx, 785);
+  drawStoryDivider(ctx, 690);
 
   drawStorySection(ctx, {
-    y: 850,
+    y: 770,
     label: "WING",
     main: `${primary}w${wing}`,
     sub: getWingLabel(primary, wing),
     accent
   });
 
-  drawStoryDivider(ctx, 1305);
+  drawStoryDivider(ctx, 1138);
 
   drawStorySection(ctx, {
-    y: 1348,
+    y: 1218,
     label: "INSTINCTUAL STACK",
     main: `${instinctStack[0]}/${instinctStack[1]}`,
     sub: `${instinctInfo[instinctStack[0]][0]} + ${instinctInfo[instinctStack[1]][0]}`,
@@ -426,7 +426,7 @@ function renderStoryCard(result) {
   ctx.fillStyle = "rgba(234, 229, 220, 0.7)";
   ctx.font = "600 30px Segoe UI, Arial, sans-serif";
   ctx.textAlign = "center";
-  ctx.fillText(pageUrl.replace("https://", ""), 540, 1812);
+  ctx.fillText(pageUrl.replace("https://", ""), 540, 1814);
   ctx.textAlign = "left";
 }
 
@@ -465,29 +465,12 @@ function drawStorySection(ctx, section) {
   ctx.fillText(section.label, 148, section.y);
 
   ctx.fillStyle = "#f7f2e8";
-  ctx.font = "900 150px Segoe UI, Arial, sans-serif";
+  ctx.font = "900 132px Segoe UI, Arial, sans-serif";
   ctx.fillText(section.main, 148, section.y + 172);
 
   ctx.fillStyle = "rgba(247, 242, 232, 0.68)";
-  ctx.font = "500 42px Segoe UI, Arial, sans-serif";
-  wrapCanvasText(ctx, section.sub, 150, section.y + 288, 780, 56);
-
-  drawMiniBars(ctx, 150, section.y + 386, section.accent);
-}
-
-function drawMiniBars(ctx, x, y, accent) {
-  const widths = [250, 160, 96];
-  widths.forEach((width, index) => {
-    ctx.fillStyle = "rgba(234, 229, 220, 0.14)";
-    ctx.beginPath();
-    ctx.roundRect(x, y + index * 34, 390, 12, 8);
-    ctx.fill();
-
-    ctx.fillStyle = index === 0 ? accent : "rgba(234, 229, 220, 0.48)";
-    ctx.beginPath();
-    ctx.roundRect(x, y + index * 34, width, 12, 8);
-    ctx.fill();
-  });
+  ctx.font = "500 40px Segoe UI, Arial, sans-serif";
+  wrapCanvasText(ctx, section.sub, 150, section.y + 294, 780, 54);
 }
 
 function drawStoryDivider(ctx, y) {
