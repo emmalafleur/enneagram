@@ -228,11 +228,11 @@ function showResult() {
 
   quizView.classList.add("hidden");
   resultView.classList.remove("hidden");
-  resultType.textContent = `Type ${primary}`;
+  resultType.textContent = `Type ${primary} ${instinctStack[0]}/${instinctStack[1]}`;
   resultTitle.textContent = title;
   resultDescription.textContent = description;
   resultWing.textContent = `Kemungkinan wing: ${primary}w${wing}. Wing dipilih dari tipe tetangga dengan skor tertinggi.`;
-  resultInstinct.textContent = `Instinct stack: ${instinctStack.join("/")}. Dominan ${instinctStack[0].toUpperCase()} berarti ${instinctInfo[instinctStack[0]][1]}.`;
+  resultInstinct.textContent = `Dominan ${instinctStack[0].toUpperCase()} berarti ${instinctInfo[instinctStack[0]][1]}.`;
   renderChart(scores, instinctScores);
 }
 
